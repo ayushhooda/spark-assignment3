@@ -23,7 +23,7 @@ class DatasetOperations {
       count().withColumnRenamed("count", "Wins").withColumnRenamed("HomeTeam", "Teams")
     val awayTeamDF = ds.select("AwayTeam","FTR").where("FTR = 'A'").groupBy("AwayTeam").
       count().withColumnRenamed("count", "Wins").withColumnRenamed("AwayTeam", "Teams")
-    val teamsDF: DataFrame = homeTeamDF.union(awayTeamDF).groupBy("Teams").sum("Wins")
+    val teamsDF: DataFrame = homeTeamDF.union(awayTeamDF).groupBy("Teams").sum("Wins").orderBy(sortCol = "sum(Wins)").limit(10)
     teamsDF.as[(String, BigInt)]
   }
 }
