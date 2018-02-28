@@ -6,6 +6,7 @@ import org.apache.spark.sql.SparkSession
 
 object Application extends App {
 
+  //scalastyle:off
   val dataFrameObj = new DataFrameOperations
   val dataSetObj = new DatasetOperations
 
@@ -31,7 +32,17 @@ object Application extends App {
 
 
   //Convert the DataFrame created in Q1 to DataSet by using only following fields.
-  val dataSetFromDataFrame = dataSetObj.convertDataFrameToDataSet(csvDataFrame)
+  val dataSetFromDataFrame = dataSetObj.convertDataFrameToDataSet(csvDataFrame, spark)
   dataSetFromDataFrame.show()
+
+  // Total number of match played by each team
+  val totalMatches = dataSetObj.getTotalMatchesForEachTeam(dataSetFromDataFrame, spark)
+  totalMatches.show()
+
+  // Top Ten team with highest wins
+//  val topTenTeams = dataSetObj.getTopTenTeamsWithHighestWin(dataSetFromDataFrame)
+//  topTenTeams.show()
+
+  //scalastyle:on
 
 }
