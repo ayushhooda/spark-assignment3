@@ -40,8 +40,8 @@ object Application extends App {
   totalMatches.show()
 
   // Top Ten team with highest wins
-//  val topTenTeams = dataSetObj.getTopTenTeamsWithHighestWin(dataSetFromDataFrame)
-//  topTenTeams.show()
+  val topTenTeams = dataSetObj.getTopTenTeamsWithHighestWin(dataSetFromDataFrame, spark)
+  topTenTeams.show()
 
   //scalastyle:on
 
