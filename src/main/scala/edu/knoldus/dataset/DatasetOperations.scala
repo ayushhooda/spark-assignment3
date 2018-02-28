@@ -11,14 +11,20 @@ class DatasetOperations {
 
   def getTotalMatchesForEachTeam(ds: Dataset[DataSetTable], spark: SparkSession): Dataset[(String, BigInt)] = {
     import spark.implicits._
-    val homeTeam: DataFrame = ds.select("HomeTeam").withColumnRenamed("HomeTeam", "Teams")
-    val awayTeam: DataFrame = ds.select("AwayTeam").withColumnRenamed("AwayTeam", "Teams")
-    val totalMatches: DataFrame = homeTeam.union(awayTeam).groupBy("Teams").count()
+    val homeTeam = ds.select("HomeTeam").withColumnRenamed("HomeTeam", "Teams")
+    val awayTeam = ds.select("AwayTeam").withColumnRenamed("AwayTeam", "Teams")
+    val totalMatches = homeTeam.union(awayTeam).groupBy("Teams").count()
     totalMatches.as[(String, BigInt)]
   }
 
-//  def getTopTenTeamsWithHighestWin(ds: Dataset[DataSetTable]): Dataset[(String, Int)] = {
-//
-//  }
+  def getTopTenTeamsWithHighestWin(ds: Dataset[DataSetTable], spark: SparkSession): Dataset[(String, BigInt)] = {
+    import spark.implicits._
+    val homeTeamDF = ds.select("HomeTeam","FTR").where("FTR = 'H'" ).groupBy("HomeTeam").
+      count().withColumnRenamed("count", "Wins").withColumnRenamed("HomeTeam", "Teams")
+    val awayTeamDF = ds.select("AwayTeam","FTR").where("FTR = 'A'").groupBy("AwayTeam").
+      count().withColumnRenamed("count", "Wins").withColumnRenamed("AwayTeam", "Teams")
+    val teamsDF: DataFrame = homeTeamDF.union(awayTeamDF).groupBy("Teams").sum("Wins")
+    teamsDF.as[(String, BigInt)]
+  }
 }
 
