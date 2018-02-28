@@ -1,3 +1,5 @@
+package edu.knoldus
+
 import edu.knoldus.dataframe.DataFrameOperations
 import edu.knoldus.dataset.DatasetOperations
 import org.apache.log4j.{Level, Logger}
